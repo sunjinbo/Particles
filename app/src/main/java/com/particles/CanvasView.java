@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 public class CanvasView extends View implements Runnable {
-    private static final int MAX_PARTICLES_NUM = 200;
+    private static final int MAX_PARTICLES_NUM = 300;
     private static final long FRAME_INTERVAL_TIME = 1000L / 16;
 
     private Paint mPaint;
@@ -38,6 +38,23 @@ public class CanvasView extends View implements Runnable {
     public CanvasView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context);
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            long startTime = SystemClock.elapsedRealtime();
+            for (int i = 0; i < mParticleList.size(); ++i) {
+                mParticleList.get(i).step();
+            }
+            invalidate();
+
+            long calcTime = SystemClock.elapsedRealtime() - startTime;
+            long delayTime = FRAME_INTERVAL_TIME - (long)(calcTime / 1000F);
+            if (delayTime > 0L) {
+                SystemClock.sleep(delayTime);
+            }
+        }
     }
 
     @Override
@@ -67,7 +84,7 @@ public class CanvasView extends View implements Runnable {
             float x = pos[0] + mRandom.nextInt(6) - 3f; // X值随机偏移
             float y =  pos[1] + mRandom.nextInt(6) - 3f; // Y值随机偏移
             float speed = mRandom.nextInt(10) + 5;
-            float angle = (float) (Math.acos(((x - centerX) / radius)));
+            float angle = (float) getAngle(x, y, centerX, centerY, radius);
             Particle p = new Particle(x, y, 3, angle, speed, Color.RED);
             mParticleList.add(p);
         }
@@ -83,20 +100,26 @@ public class CanvasView extends View implements Runnable {
         new Thread(this).start();
     }
 
-    @Override
-    public void run() {
-        while (true) {
-            long startTime = SystemClock.elapsedRealtime();
-            for (int i = 0; i < mParticleList.size(); ++i) {
-                mParticleList.get(i).step();
-            }
-            invalidate();
-
-            long calcTime = SystemClock.elapsedRealtime() - startTime;
-            long delayTime = FRAME_INTERVAL_TIME - (long)(calcTime / 1000F);
-            if (delayTime > 0L) {
-                SystemClock.sleep(delayTime);
-            }
+    private double getAngle(float x, float y, float centerX, float centerY, float radius) {
+        double angle = 0F;
+        if (x - centerX > 0F && y - centerY == 0F) { // 在x轴的正向轴上
+            angle = 0F;
+        } else if (x - centerX > 0F && y - centerY > 0F) { // 在第一象限
+            angle = Math.acos(((x - centerX) / radius));
+        } else if (x - centerX == 0f && y - centerY < 0F) { // 在y轴的正向轴上
+            angle = Math.PI / 2f;
+        } else if (x - centerX < 0F && y - centerY > 0F) { // 在第二象限
+            angle = Math.PI - Math.acos(((centerX - x) / radius));
+        } else if (x - centerX < 0F && y - centerY == 0F) { // 在x轴的负向轴上
+            angle = Math.PI;
+        } else if (x - centerX < 0F && y - centerY < 0F) { // 在第三象限
+            angle = Math.PI + Math.acos(((centerX - x) / radius));
+        } else if (x - centerX == 0f && y - centerY > 0F) { // 在y轴的负向轴上
+            angle = Math.PI * 1.5F;
+        } else if (x - centerX > 0F && y - centerY < 0F) { // 在第四象限
+            angle = Math.PI * 2F - Math.acos(((x - centerX) / radius));
         }
+
+        return angle;
     }
 }

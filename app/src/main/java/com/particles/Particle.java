@@ -29,8 +29,8 @@ public class Particle {
     public void step() {
         float offsetX = (float)(Math.cos(angle) * speed);
         float offsetY = (float)(Math.sin(angle) * speed);
-        x -= offsetX;
-        y -= offsetY;
+        x += offsetX;
+        y += offsetY;
         life -= 5;
         if (life <= 0) {
             life = 255;
