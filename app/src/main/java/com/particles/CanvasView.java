@@ -105,19 +105,19 @@ public class CanvasView extends View implements Runnable {
         if (x - centerX > 0F && y - centerY == 0F) { // 在x轴的正向轴上
             angle = 0F;
         } else if (x - centerX > 0F && y - centerY > 0F) { // 在第一象限
-            angle = Math.acos(((x - centerX) / radius));
+            angle = Math.acos(((x - centerX) / radius)); // 反余弦函数可以得到弧度值
         } else if (x - centerX == 0f && y - centerY < 0F) { // 在y轴的正向轴上
             angle = Math.PI / 2f;
         } else if (x - centerX < 0F && y - centerY > 0F) { // 在第二象限
-            angle = Math.PI - Math.acos(((centerX - x) / radius));
+            angle = Math.PI - Math.acos(((centerX - x) / radius)); // 反余弦函数可以得到弧度值
         } else if (x - centerX < 0F && y - centerY == 0F) { // 在x轴的负向轴上
             angle = Math.PI;
         } else if (x - centerX < 0F && y - centerY < 0F) { // 在第三象限
-            angle = Math.PI + Math.acos(((centerX - x) / radius));
+            angle = Math.PI + Math.acos(((centerX - x) / radius)); // 反余弦函数可以得到弧度值
         } else if (x - centerX == 0f && y - centerY > 0F) { // 在y轴的负向轴上
             angle = Math.PI * 1.5F;
         } else if (x - centerX > 0F && y - centerY < 0F) { // 在第四象限
-            angle = Math.PI * 2F - Math.acos(((x - centerX) / radius));
+            angle = Math.PI * 2F - Math.acos(((x - centerX) / radius)); // 反余弦函数可以得到弧度值
         }
 
         return angle;
