@@ -44,4 +44,16 @@ public class Particle {
         paint.setAlpha(life);
         canvas.drawOval(x - radius, y - radius, x + radius, y + radius, paint);
     }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getColor() {
+        return color;
+    }
 }
