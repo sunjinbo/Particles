@@ -1,2 +1,2 @@
 # Particles
-this is an android demo demonstrated how to display a particles effect based on OpenGL ES 2.0.
+render particles on OpenGL or Canvas.
